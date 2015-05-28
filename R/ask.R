@@ -16,10 +16,12 @@ questions$confirm <- function(message, default = TRUE) {
   res
 }
 
-questions$input <- function(message, default = "") {
+questions$input <- function(message, default = "", filter = NULL) {
   if (default != "") message <- message %+% " (" %+% default %+% ")"
   msg(message %+% " ")
-  readline()
+  result <- readline()
+  if (!is.null(filter)) result <- filter(result)
+  result
 }
 
 #' @importFrom utils menu
@@ -95,15 +97,13 @@ ask <- function(...) {
   type <- NA_character_
   name <- NA_character_
 
-  question <- function(message, ..., validate = NULL,
-                       filter = NULL, when = NULL) {
+  question <- function(message, ..., validate = NULL, when = NULL) {
     if (! type %in% names(questions)) stop("Unknown question type");
 
     if (!is.null(when) && ! when(answers)) return(NULL)
 
     repeat {
       result <- questions[[type]](name, message, ...)
-      if (!is.null(filter)) result <- filter(result)
       if (is.null(validate)) break
       valres <- validate(result)
       if (identical(valres, TRUE)) break
