@@ -24,7 +24,7 @@ questions$input <- function(name, message, default = "") {
 
 #' @importFrom utils menu
 
-questions$select1 <- function(name, message, choices, default = choices[1]) {
+questions$choose <- function(name, message, choices, default = choices[1]) {
   stopifnot(default %in% choices)
   repeat {
     msg(message, appendLF = TRUE)
@@ -60,7 +60,7 @@ questions$select1 <- function(name, message, choices, default = choices[1]) {
 #' ask(
 #'   name =  input("What is your name?"),
 #'   cool = confirm("Are you cool?"),
-#'   drink = select1("Select your poison!", c("Beer", "Wine"))
+#'   drink = choose("Select your poison!", c("Beer", "Wine"))
 #' )
 #' }
 

@@ -18,9 +18,9 @@ Ask a question to the user, through the command line
 \examples{
 \dontrun{
 ask(
-  q("input", "name", "What is your name?"),
-  q("confirm", "cool", "Are you cool?"),
-  q("rawlist", "booze", "Select your poison!", c("Beer", "Wine"))
+  name =  input("What is your name?"),
+  cool = confirm("Are you cool?"),
+  drink = choose("Select your poison!", c("Beer", "Wine"))
 )
 }
 }
