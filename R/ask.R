@@ -1,7 +1,7 @@
 
 questions <- list()
 
-questions$confirm <- function(name, message, default = TRUE) {
+questions$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
   repeat {
     msg(message %+% prompt)
@@ -16,7 +16,7 @@ questions$confirm <- function(name, message, default = TRUE) {
   res
 }
 
-questions$input <- function(name, message, default = "") {
+questions$input <- function(message, default = "") {
   if (default != "") message <- message %+% " (" %+% default %+% ")"
   msg(message %+% " ")
   readline()
@@ -24,7 +24,7 @@ questions$input <- function(name, message, default = "") {
 
 #' @importFrom utils menu
 
-questions$choose <- function(name, message, choices, default = NA) {
+questions$choose <- function(message, choices, default = NA) {
   default <- as.numeric(default)
   stopifnot(is.na(default) || is_index(choices, default))
   repeat {
