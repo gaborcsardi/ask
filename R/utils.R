@@ -4,5 +4,10 @@ check_tty <- function() {
 }
 
 is_integerish <- function(x) {
-  stopifnot(all(round(x) == x))
+  all(round(x) == x)
+}
+
+is_index <- function(vector, idx) {
+  is_integerish(idx) && length(idx) == 1 &&
+    idx >= 1 && idx <= length(vector)
 }

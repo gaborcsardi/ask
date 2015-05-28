@@ -24,14 +24,19 @@ questions$input <- function(name, message, default = "") {
 
 #' @importFrom utils menu
 
-questions$choose <- function(name, message, choices, default = choices[1]) {
-  stopifnot(default %in% choices)
+questions$choose <- function(name, message, choices, default = NA) {
+  default <- as.numeric(default)
+  stopifnot(is.na(default) || is_index(choices, default))
   repeat {
     msg(message, appendLF = TRUE)
     msg(paste0(" ", seq_along(choices), ". ", choices, "\n"))
-    msg("[?] (" %+% default %+% ") ")
+    if (is.na(default)) {
+      msg("[?] ")
+    } else {
+      msg("[?] (" %+% default %+% ") ")
+    }
     res <- readline()
-    if (res == "") {
+    if (res == "" && !is.na(default)) {
       res <- default;
       break;
     }
