@@ -24,7 +24,7 @@ questions$input <- function(name, message, default = "") {
 
 #' @importFrom utils menu
 
-questions$rawlist <- function(name, message, choices, default = choices[1]) {
+questions$select1 <- function(name, message, choices, default = choices[1]) {
   stopifnot(default %in% choices)
   repeat {
     msg(message, appendLF = TRUE)
@@ -48,6 +48,8 @@ questions$rawlist <- function(name, message, choices, default = choices[1]) {
 
 #' Ask a question to the user, through the command line
 #'
+#'
+#'
 #' @param ... Questions to ask, see details below.
 #' @return A named list with the answers.
 #'
@@ -56,9 +58,9 @@ questions$rawlist <- function(name, message, choices, default = choices[1]) {
 #' @examples
 #' \dontrun{
 #' ask(
-#'   q("input", "name", "What is your name?"),
-#'   q("confirm", "cool", "Are you cool?"),
-#'   q("rawlist", "booze", "Select your poison!", c("Beer", "Wine"))
+#'   name =  input("What is your name?"),
+#'   cool = confirm("Are you cool?"),
+#'   drink = select1("Select your poison!", c("Beer", "Wine"))
 #' )
 #' }
 
@@ -67,10 +69,28 @@ ask <- function(...) {
   check_tty()
 
   qs <- lazy_dots(...)
+  qs_names <- names(qs)
+
+  if (is.null(qs_names) || any(qs_names == "") || any(duplicated(qs_names))) {
+    stop("Questions must have unique names")
+  }
+
+  if (any(unlist(lapply(qs, function(x) class(x$expr))) != "call")) {
+    stop("Questions must be function calls")
+  }
+
+  qs_fun_names <- unlist(lapply(qs, function(x) as.character(x$expr[[1]])))
+
+  unknown_fun <- setdiff(qs_fun_names, names(questions))
+  if (length(unknown_fun)) {
+    stop("Unknown question types: ", paste(unknown_fun, collapse = ", "))
+  }
 
   answers <- list()
+  type <- NA_character_
+  name <- NA_character_
 
-  question <- function(type, name, message, ..., validate = NULL,
+  question <- function(message, ..., validate = NULL,
                        filter = NULL, when = NULL) {
     if (! type %in% names(questions)) stop("Unknown question type");
 
@@ -89,8 +109,11 @@ ask <- function(...) {
     answers
   }
 
-  for (q in qs) {
-    answers <- lazy_eval(q, data = list(q = question))
+  for (q in seq_along(qs)) {
+    name <- qs_names[q]
+    type <- qs_fun_names[q]
+    data <- structure(list(question), names = type)
+    answers <- lazy_eval(qs[[q]], data = data)
   }
   answers
 }
