@@ -6,7 +6,7 @@ Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
 Description: Ask questions to the user through the CLI and validate the answer.
     Several types of input are supported: yes-no question, single choice,
     multiple choice, etc.
-License: BSD_3_clause + file LICENSE
+License: MIT + file LICENSE
 LazyData: true
 URL: https://github.com/gaborcsardi/ask
 BugReports: https://github.com/gaborcsardi/ask/issues
