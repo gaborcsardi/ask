@@ -1,8 +1,14 @@
 Package: ask
-Title: What the Package Does (one line, title case)
-Version: 0.0.0.9000
-Authors@R: person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph)
-Depends: R (>= 3.2.0)
-License: What license is it under?
+Title: Friendly Command Line Interface Tools
+Version: 1.0.0
+Author: Gabor Csardi [aut, cre]
+Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
+Description: Ask questions to the user through the CLI and validate the answer.
+    Several types of input are supported: yes-no question, single choice,
+    multiple choice, etc.
+License: BSD_3_clause + file LICENSE
 LazyData: true
+URL: https://github.com/gaborcsardi/ask
+BugReports: https://github.com/gaborcsardi/ask/issues
+Imports:
+    lazyeval
