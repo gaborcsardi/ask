@@ -16,10 +16,19 @@ questions$confirm <- function(message, default = TRUE) {
   res
 }
 
-questions$input <- function(message, default = "", filter = NULL) {
+questions$input <- function(message, default = "", filter = NULL,
+                            validate = NULL) {
   if (default != "") message <- message %+% " (" %+% default %+% ")"
+
   msg(message %+% " ")
-  result <- readline()
+  repeat {
+    result <- readline()
+    if (is.null(validate)) break
+    valres <- validate(result)
+    if (identical(valres, TRUE)) break
+    error_msg(valres)
+  }
+
   if (!is.null(filter)) result <- filter(result)
   result
 }
@@ -97,20 +106,12 @@ ask <- function(...) {
   type <- NA_character_
   name <- NA_character_
 
-  question <- function(message, ..., validate = NULL, when = NULL) {
+  question <- function(message, ..., when = NULL) {
     if (! type %in% names(questions)) stop("Unknown question type");
 
     if (!is.null(when) && ! when(answers)) return(NULL)
 
-    repeat {
-      result <- questions[[type]](name, message, ...)
-      if (is.null(validate)) break
-      valres <- validate(result)
-      if (identical(valres, TRUE)) break
-      error_msg(valres)
-    }
-
-    answers[[name]] <- result
+    answers[[name]] <- questions[[type]](name, message, ...)
     answers
   }
 
