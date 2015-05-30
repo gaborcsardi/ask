@@ -1,7 +1,7 @@
 
 style_plain <- list()
 
-#' @importFrom crayon combine_styles magenta bold
+#' @importFrom crayon combine_styles magenta bold start finish
 
 style_plain$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
@@ -23,24 +23,26 @@ style_plain$confirm <- function(message, default = TRUE) {
   res
 }
 
-#' @importFrom crayon magenta start finish
+#' @importFrom crayon combine_styles magenta bold start finish
 
 style_plain$input <- function(message, default = "", filter = NULL,
                             validate = NULL) {
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
+  emph <- combine_styles(magenta, bold)
+
   msg(message %+% " ")
   repeat {
-    cat(start(magenta))
+    cat(start(emph))
     result <- readline()
     if (is.null(validate)) break
     valres <- validate(result)
     if (identical(valres, TRUE)) break
-    cat(finish(magenta))
+    cat(finish(emph))
     error_msg(valres)
-    cat(start(magenta))
+    cat(start(emph))
   }
-  cat(finish(magenta))
+  cat(finish(emph))
 
   if (!is.null(filter)) result <- filter(result)
   result
