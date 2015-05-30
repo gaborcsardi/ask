@@ -74,7 +74,33 @@ style_plain$choose <- function(message, choices, default = NA) {
       msg("Sorry, I did not get that.", appendLF = TRUE)
     } else {
       res <- choices[res]
-      break;
+      break
+    }
+  }
+  res
+}
+
+#' @importFrom crayon green magenta bold combine_styles
+
+style_plain$checkbox <- function(message, choices) {
+
+  choices <- as.character(choices)
+  emph <- combine_styles(magenta, bold)
+
+  repeat {
+    msg(message, appendLF = TRUE)
+    msg(paste0(" ", seq_along(choices), ". ", choices, "\n"))
+    msg(green("[?]") %+% " (Please use comma separated numbers) ")
+    cat(start(emph))
+    res <- strtrim(strsplit(strtrim(readline()), ",")[[1]])
+    cat(finish(emph))
+    res <- suppressWarnings(res <- as.numeric(res))
+    if (any(is.na(res)) || any(!is_integerish(res)) ||
+        any(res < 1) || any(res > length(choices))) {
+      msg("Sorry, I did not get that.", appendLF = TRUE)
+    } else {
+      res <- choices[sort(unique(res))]
+      break
     }
   }
   res

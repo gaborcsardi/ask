@@ -33,3 +33,7 @@ can_move_cursor <- function() {
 cursor_up <- function(num) {
   cat("\033[", num, "A", sep = "")
 }
+
+strtrim <- function(x) {
+  gsub("\\s+$", "", gsub("^\\s+", "", x))
+}

@@ -23,6 +23,7 @@
 #'     are considered as positive, \sQuote{n} and \sQuote{no} as negative
 #'     answers (case insensitively).}
 #'   \item{choose}{Choose one item form multiple items.}
+#'   \item{checkbox}{Select multiple values from a list.}
 #' }
 #'
 #' @section \sQuote{input} type:
@@ -66,6 +67,16 @@
 #'   \item{\code{when}}{See \sQuote{Conditional execution} below.}
 #' }
 #'
+#' @section \sQuote{checkbox} type:
+#' \preformatted{
+#'   checkbox(message, choices, when = NULL)
+#' }
+#' \describe{
+#'   \item{\code{message}}{Message to print.}
+#'   \item{\code{choices}}{Possible choices, character vector.}
+#'   \item{\code{when}}{See \sQuote{Conditional execution} below.}
+#' }
+#'
 #' @section Conditional execution:
 #' The \code{when} argument to a question can be used for conditional
 #' execution of questions. If it is given (and not \code{NULL}), then
@@ -88,7 +99,8 @@
 #' ask(
 #'   name =  input("What is your name?"),
 #'   cool = confirm("Are you cool?"),
-#'   drink = choose("Select your poison!", c("Beer", "Wine"))
+#'   drink = choose("Select your poison!", c("Beer", "Wine")),
+#'   language = checkbox("Favorite languages?", c("C", "C++", "Python", "R"))
 #' )
 #' }
 

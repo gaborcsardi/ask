@@ -58,3 +58,53 @@ style_fancy$choose <- function(message, choices, default = NA) {
 
   choices[current]
 }
+
+style_fancy$checkbox <- function(message, choices) {
+
+  choices <- as.character(choices)
+  selected <- numeric()
+  current <- 1
+
+  msg(message, appendLF = TRUE)
+
+  draw <- function() {
+    choices[selected] <- magenta(choices[selected])
+    pr <- paste(
+      ifelse(seq_along(choices) == current, magenta(" > "), "   "),
+      ifelse(seq_along(choices) %in% selected, magenta("[x] "), "[ ] "),
+      choices, sep = "", collapse = "\n"
+    )
+    msg(pr, appendLF = TRUE)
+  }
+
+  draw()
+  repeat {
+    repeat {
+      ans <- keypress()
+      if (ans %in% c("up", "down", "n", "p", "\n", " ")) break
+    }
+    if (ans %in% c("up", "p") && current != 1) {
+      current <- current - 1
+      cursor_up(length(choices))
+      draw()
+
+    } else if (ans %in% c("down", "n") && current != length(choices)) {
+      current <- current + 1
+      cursor_up(length(choices))
+      draw()
+
+    } else if (ans == " ") {
+      if (current %in% selected) {
+        selected <- setdiff(selected, current)
+      } else {
+        selected <- c(selected, current)
+      }
+      cursor_up(length(choices))
+      draw()
+
+    } else if (ans == "\n") {
+      break
+    }
+  }
+  choices[sort(selected)]
+}

@@ -41,6 +41,7 @@ The \code{ask} function takes named arguments only:
     are considered as positive, \sQuote{n} and \sQuote{no} as negative
     answers (case insensitively).}
   \item{choose}{Choose one item form multiple items.}
+  \item{checkbox}{Select multiple values from a list.}
 }
 }
 
@@ -91,6 +92,18 @@ The \code{ask} function takes named arguments only:
 }
 }
 
+\section{\sQuote{checkbox} type}{
+
+\preformatted{
+  checkbox(message, choices, when = NULL)
+}
+\describe{
+  \item{\code{message}}{Message to print.}
+  \item{\code{choices}}{Possible choices, character vector.}
+  \item{\code{when}}{See \sQuote{Conditional execution} below.}
+}
+}
+
 \section{Conditional execution}{
 
 The \code{when} argument to a question can be used for conditional
@@ -106,7 +119,8 @@ answer list is not chagned.
 ask(
   name =  input("What is your name?"),
   cool = confirm("Are you cool?"),
-  drink = choose("Select your poison!", c("Beer", "Wine"))
+  drink = choose("Select your poison!", c("Beer", "Wine")),
+  language = checkbox("Favorite languages?", c("C", "C++", "Python", "R"))
 )
 }
 }
