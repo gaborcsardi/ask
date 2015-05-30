@@ -87,13 +87,13 @@
 #' answer list is not chagned.
 #'
 #' @param ... Questions to ask, see details below.
-#' @param .prompt Prompt to prepend to all questions. Defaults to
-#'   a green question mark in brackets.
+#' @param .prompt Prompt to prepend to all questions.
 #' @return A named list with the answers.
 #'
 #' @export
 #' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom crayon green
+#' @importFrom prettysymbols symbol
 #' @examples
 #' \dontrun{
 #' ask(
@@ -104,9 +104,9 @@
 #' )
 #' }
 
-ask <- function(..., .prompt = green("[?] ")) {
+ask <- function(..., .prompt = green(paste0(symbol$star, " "))) {
 
-  check_tty()
+  if (!interactive()) { stop("ask() can only be used in interactive mode" ) }
 
   qs <- lazy_dots(...)
   qs_names <- names(qs)

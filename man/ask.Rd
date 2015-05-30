@@ -4,13 +4,12 @@
 \alias{ask}
 \title{Ask questions to the user, at the command line, and get the answers}
 \usage{
-ask(..., .prompt = green("[?] "))
+ask(..., .prompt = green(paste0(symbol$star, " ")))
 }
 \arguments{
 \item{...}{Questions to ask, see details below.}
 
-\item{.prompt}{Prompt to prepend to all questions. Defaults to
-a green question mark in brackets.}
+\item{.prompt}{Prompt to prepend to all questions.}
 }
 \value{
 A named list with the answers.

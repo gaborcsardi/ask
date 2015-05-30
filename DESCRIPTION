@@ -13,7 +13,8 @@ BugReports: https://github.com/gaborcsardi/ask/issues
 Imports:
     lazyeval,
     keypress,
-    crayon (>= 1.3.0)
+    crayon (>= 1.3.0),
+    prettysymbols
 Collate:
     'ask.R'
     'style_plain.R'

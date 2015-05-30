@@ -1,5 +1,6 @@
 
 #' @include style_plain.R
+#' @importFrom prettysymbols symbol
 
 style_fancy <- list()
 
@@ -15,7 +16,7 @@ style_fancy$confirm <- function(message, default = TRUE) {
     if (ans == 'y' || ans == 'n' || ans == '\n') break
   }
   ans <- ans == 'y' || (default && ans == '\n')
-  cat(c(magenta(bold('Y')), red('N'))[2 - ans], "\n", sep = "")
+  msg(c(magenta(bold('Y')), red('N'))[2 - ans], "\n", sep = "")
   ans
 }
 
@@ -32,8 +33,9 @@ style_fancy$choose <- function(message, choices, default = NA) {
 
   draw <- function() {
     choices[current] <- magenta(choices[current])
-    pr <- paste(ifelse(seq_along(choices) == current, magenta(" > "), "   "),
-                choices, sep = "", collapse = "\n")
+    pointer <- magenta(symbol$pointer)
+    pr <- paste("", ifelse(seq_along(choices) == current, pointer, " "),
+                choices, collapse = "\n")
     msg(pr, appendLF = TRUE)
   }
 
@@ -69,10 +71,14 @@ style_fancy$checkbox <- function(message, choices) {
 
   draw <- function() {
     choices[selected] <- magenta(choices[selected])
+    pointer <- magenta(symbol$pointer)
+    box_empty <- symbol$radio_off
+    box_fill <- magenta(symbol$radio_on)
     pr <- paste(
-      ifelse(seq_along(choices) == current, magenta(" > "), "   "),
-      ifelse(seq_along(choices) %in% selected, magenta("[x] "), "[ ] "),
-      choices, sep = "", collapse = "\n"
+      "",
+      ifelse(seq_along(choices) == current, pointer, " "),
+      ifelse(seq_along(choices) %in% selected, box_fill, box_empty),
+      choices, collapse = "\n"
     )
     msg(pr, appendLF = TRUE)
   }

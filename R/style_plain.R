@@ -1,25 +1,22 @@
 
 style_plain <- list()
 
+#' @importFrom prettysymbols symbol
 #' @importFrom crayon combine_styles magenta bold start finish
 
 style_plain$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
   emph <- combine_styles(magenta, bold)
   repeat {
-    msg(message %+% prompt)
-    cat(start(emph))
-    ans <- readline()
+    ans <- readline(prompt = bold(message) %+% prompt %+% start(emph))
     res <- NA
     if (ans == "") res <- default
     if (tolower(ans) == "y" || tolower(ans) == "yes") res <- TRUE
     if (tolower(ans) == "n" || tolower(ans) == "no" ) res <- FALSE
     if (!is.na(res)) break
-    cat(finish(emph))
-    msg("Sorry, did not get it.", appendLF = TRUE)
-    cat(start(emph))
+    msg(finish(emph) %+% "Sorry, did not get it.", appendLF = TRUE)
   }
-    cat(finish(emph))
+  msg(finish(emph))
   res
 }
 
@@ -31,18 +28,14 @@ style_plain$input <- function(message, default = "", filter = NULL,
 
   emph <- combine_styles(magenta, bold)
 
-  msg(message %+% " ")
   repeat {
-    cat(start(emph))
-    result <- readline()
+    result <- readline(bold(message) %+% " " %+% start(emph))
     if (is.null(validate)) break
     valres <- validate(result)
     if (identical(valres, TRUE)) break
-    cat(finish(emph))
-    error_msg(valres)
-    cat(start(emph))
+    error_msg(finish(emph), valres)
   }
-  cat(finish(emph))
+  msg(finish(emph))
 
   if (!is.null(filter)) result <- filter(result)
   result
@@ -54,17 +47,22 @@ style_plain$choose <- function(message, choices, default = NA) {
   default <- as.numeric(default)
   stopifnot(is.na(default) || is_index(choices, default))
   emph <- combine_styles(magenta, bold)
+
+  msg(
+    bold(message),
+    "\n",
+    paste0(" ", seq_along(choices), ". ", choices, collapse = "\n"),
+    "\n"
+  )
+
   repeat {
-    msg(message, appendLF = TRUE)
-    msg(paste0(" ", seq_along(choices), ". ", choices, "\n"))
-    if (is.na(default)) {
-      msg(green("[?] "))
-    } else {
-      msg(green("[?]") %+%" (" %+% default %+% ") ")
-    }
-    cat(start(emph))
-    res <- readline()
-    cat(finish(emph))
+    prompt <- paste0(
+      green(symbol$fancy_question_mark), " ",
+      if (! is.na(default)) " (" %+% default %+% ") " else "",
+      start(emph)
+    )
+    res <- readline(prompt = prompt)
+    msg(finish(emph))
     if (res == "" && !is.na(default)) {
       res <- default
       break
@@ -87,13 +85,23 @@ style_plain$checkbox <- function(message, choices) {
   choices <- as.character(choices)
   emph <- combine_styles(magenta, bold)
 
+  msg(
+    bold(message),
+    "\n",
+    paste0(" ", seq_along(choices), ". ", choices, collapse = "\n"),
+    "\n"
+  )
+
   repeat {
-    msg(message, appendLF = TRUE)
-    msg(paste0(" ", seq_along(choices), ". ", choices, "\n"))
-    msg(green("[?]") %+% " (Please use comma separated numbers) ")
-    cat(start(emph))
-    res <- strtrim(strsplit(strtrim(readline()), ",")[[1]])
-    cat(finish(emph))
+
+    prompt <- paste0(
+      green(symbol$fancy_question_mark),
+      " (Please use comma separated numbers) ",
+      start(emph)
+    )
+
+    res <- strtrim(strsplit(strtrim(readline(prompt = prompt)), ",")[[1]])
+    msg(finish(emph))
     res <- suppressWarnings(res <- as.numeric(res))
     if (any(is.na(res)) || any(!is_integerish(res)) ||
         any(res < 1) || any(res > length(choices))) {
