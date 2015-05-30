@@ -4,6 +4,7 @@
 style_fancy <- list()
 
 #' @importFrom keypress keypress
+#' @importFrom crayon magenta red bold
 
 style_fancy$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
@@ -13,11 +14,14 @@ style_fancy$confirm <- function(message, default = TRUE) {
     ans <- tolower(ans)
     if (ans == 'y' || ans == 'n' || ans == '\n') break
   }
-  cat("\n")
-  ans == 'y' || (default && ans == '\n')
+  ans <- ans == 'y' || (default && ans == '\n')
+  cat(c(magenta(bold('Y')), red('N'))[2 - ans], "\n", sep = "")
+  ans
 }
 
 style_fancy$input <- style_plain$input
+
+#' @importFrom crayon magenta
 
 style_fancy$choose <- function(message, choices, default = NA) {
 
@@ -27,7 +31,9 @@ style_fancy$choose <- function(message, choices, default = NA) {
   msg(message, appendLF = TRUE)
   
   draw <- function() {
-    pr <- paste(ifelse(seq_along(choices) == current, " > ", "   "),
+    sel_choices <- choices
+    choices[current] <- magenta(choices[current])
+    pr <- paste(ifelse(seq_along(choices) == current, magenta(" > "), "   "),
                 choices, sep = "", collapse = "\n")
     message(pr)
   }
