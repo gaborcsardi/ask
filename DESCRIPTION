@@ -11,4 +11,10 @@ LazyData: true
 URL: https://github.com/gaborcsardi/ask
 BugReports: https://github.com/gaborcsardi/ask/issues
 Imports:
-    lazyeval
+    lazyeval,
+    keypress
+Collate:
+    'ask.R'
+    'style_plain.R'
+    'style_fancy.R'
+    'utils.R'

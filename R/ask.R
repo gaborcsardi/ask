@@ -134,20 +134,12 @@ ask <- function(...) {
   answers
 }
 
-
-msg <- function(..., appendLF = FALSE) {
-  message(..., appendLF = appendLF)
-}
-
-error_msg <- function(..., appendLF = TRUE) {
-  msg(..., appendLF = appendLF)
-}
-
-`%+%` <- function(l, r) {
-  stopifnot(length(l) == 1, length(r) == 1)
-  paste0(as.character(l), as.character(r))
-}
+#' @importFrom keypress has_keypress_support
 
 get_style <- function() {
-  style_plain
+  if (can_move_cursor() && has_keypress_support()) {
+    style_fancy
+  } else {
+    style_plain
+  }
 }
