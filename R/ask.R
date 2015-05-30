@@ -76,10 +76,13 @@
 #' answer list is not chagned.
 #'
 #' @param ... Questions to ask, see details below.
+#' @param .prompt Prompt to prepend to all questions. Defaults to
+#'   a green question mark in brackets.
 #' @return A named list with the answers.
 #'
 #' @export
 #' @importFrom lazyeval lazy_dots lazy_eval
+#' @importFrom crayon green
 #' @examples
 #' \dontrun{
 #' ask(
@@ -89,7 +92,7 @@
 #' )
 #' }
 
-ask <- function(...) {
+ask <- function(..., .prompt = green("[?] ")) {
 
   check_tty()
 
@@ -120,7 +123,7 @@ ask <- function(...) {
 
     if (!is.null(when) && ! when(answers)) return(NULL)
 
-    answers[[name]] <- questions[[type]](message, ...)
+    answers[[name]] <- questions[[type]](.prompt %+% message, ...)
     answers
   }
 
