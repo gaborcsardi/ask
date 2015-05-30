@@ -16,7 +16,7 @@ style_plain$confirm <- function(message, default = TRUE) {
     if (tolower(ans) == "n" || tolower(ans) == "no" ) res <- FALSE
     if (!is.na(res)) break
     cat(finish(emph))
-    msg("Sorry, did not get it.", appendLF = TRUE);
+    msg("Sorry, did not get it.", appendLF = TRUE)
     cat(start(emph))
   }
     cat(finish(emph))
@@ -48,23 +48,26 @@ style_plain$input <- function(message, default = "", filter = NULL,
   result
 }
 
-#' @importFrom utils menu
+#' @importFrom crayon green magenta bold combine_styles
 
 style_plain$choose <- function(message, choices, default = NA) {
   default <- as.numeric(default)
   stopifnot(is.na(default) || is_index(choices, default))
+  emph <- combine_styles(magenta, bold)
   repeat {
     msg(message, appendLF = TRUE)
     msg(paste0(" ", seq_along(choices), ". ", choices, "\n"))
     if (is.na(default)) {
-      msg("[?] ")
+      msg(green("[?] "))
     } else {
-      msg("[?] (" %+% default %+% ") ")
+      msg(green("[?]") %+%" (" %+% default %+% ") ")
     }
+    cat(start(emph))
     res <- readline()
+    cat(finish(emph))
     if (res == "" && !is.na(default)) {
-      res <- default;
-      break;
+      res <- default
+      break
     }
     suppressWarnings(res <- as.numeric(res))
     if (is.na(res) || res < 1 || res > length(choices) || ! is_integerish(res)) {

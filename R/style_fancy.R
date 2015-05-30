@@ -29,13 +29,12 @@ style_fancy$choose <- function(message, choices, default = NA) {
   if (is.na(current)) current <- 1
 
   msg(message, appendLF = TRUE)
-  
+
   draw <- function() {
-    sel_choices <- choices
     choices[current] <- magenta(choices[current])
     pr <- paste(ifelse(seq_along(choices) == current, magenta(" > "), "   "),
                 choices, sep = "", collapse = "\n")
-    message(pr)
+    msg(pr, appendLF = TRUE)
   }
 
   draw()
@@ -53,9 +52,9 @@ style_fancy$choose <- function(message, choices, default = NA) {
       cursor_up(length(choices))
       draw()
     } else if (ans %in% c("\n", " ")) {
-      break;
+      break
     }
   }
-  
+
   choices[current]
 }
