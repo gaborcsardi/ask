@@ -70,10 +70,14 @@ style_fancy$choose <- function(message, choices, default = NA) {
   choices[current]
 }
 
-style_fancy$checkbox <- function(message, choices) {
+style_fancy$checkbox <- function(message, choices, default = numeric()) {
 
   choices <- as.character(choices)
-  selected <- numeric()
+
+  if (is.character(default)) default <- pmatch(default, choices)
+  default <- as.numeric(default)
+
+  selected <- default
   current <- 1
 
   msg(message, appendLF = TRUE)

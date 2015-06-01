@@ -82,7 +82,10 @@ style_plain$choose <- function(message, choices, default = NA) {
 
 #' @importFrom crayon green magenta bold combine_styles
 
-style_plain$checkbox <- function(message, choices) {
+style_plain$checkbox <- function(message, choices, default = numeric()) {
+
+  if (is.character(default)) default <- pmatch(default, choices)
+  default <- as.numeric(default)
 
   choices <- as.character(choices)
   emph <- combine_styles(magenta, bold)
@@ -95,15 +98,21 @@ style_plain$checkbox <- function(message, choices) {
   )
 
   repeat {
-
     prompt <- paste0(
       green(symbol$fancy_question_mark),
-      " (Please use comma separated numbers) ",
+      " (Commas separated numbers, dash for nothing) ",
       start(emph)
     )
 
     res <- strtrim(strsplit(strtrim(readline(prompt = prompt)), ",")[[1]])
     msg(finish(emph))
+
+    if (length(res) == 1 && res == "-") {
+      res <- numeric()
+    } else if (length(res) == 1 && res == "") {
+      res <- default()
+    }
+
     res <- suppressWarnings(res <- as.numeric(res))
     if (any(is.na(res)) || any(!is_integerish(res)) ||
         any(res < 1) || any(res > length(choices))) {

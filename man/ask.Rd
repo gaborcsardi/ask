@@ -95,11 +95,13 @@ The \code{ask} function takes named arguments only:
 \section{\sQuote{checkbox} type}{
 
 \preformatted{
-  checkbox(message, choices, when = NULL)
+  checkbox(message, choices, default = numeric(), when = NULL)
 }
 \describe{
   \item{\code{message}}{Message to print.}
   \item{\code{choices}}{Possible choices, character vector.}
+  \item{\code{default}}{Indices or values of default choices.
+    values are matches using partial matches via \code{pmatch}.}
   \item{\code{when}}{See \sQuote{Conditional execution} below.}
 }
 }
