@@ -35,6 +35,7 @@ style_plain$input <- function(message, default = "", filter = NULL,
     if (identical(valres, TRUE)) break
     error_msg(finish(emph), valres)
   }
+  if (result == "") result <- default
   msg(finish(emph))
 
   if (!is.null(filter)) result <- filter(result)
