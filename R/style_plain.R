@@ -45,6 +45,7 @@ style_plain$input <- function(message, default = "", filter = NULL,
 #' @importFrom crayon green magenta bold combine_styles
 
 style_plain$choose <- function(message, choices, default = NA) {
+  if (is.character(default)) default <- pmatch(default, choices)
   default <- as.numeric(default)
   stopifnot(is.na(default) || is_index(choices, default))
   emph <- combine_styles(magenta, bold)

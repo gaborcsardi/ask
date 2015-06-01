@@ -25,6 +25,9 @@ style_fancy$input <- style_plain$input
 #' @importFrom crayon magenta
 
 style_fancy$choose <- function(message, choices, default = NA) {
+  if (is.character(default)) default <- pmatch(default, choices)
+  default <- as.numeric(default)
+  stopifnot(is.na(default) || is_index(choices, default))
 
   current <- default
   if (is.na(current)) current <- 1

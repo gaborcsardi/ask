@@ -62,8 +62,9 @@
 #' \describe{
 #'   \item{\code{message}}{Message to print.}
 #'   \item{\code{choices}}{Possible choices, character vector.}
-#'   \item{\code{default}}{Index of the default choice (if the user
-#'     hits enter, or \code{NA} for no default.}
+#'   \item{\code{default}}{Index or value of the default choice (if the user
+#'     hits enter, or \code{NA} for no default. Values are matched using
+#'     partial matches via \code{pmatch}.}
 #'   \item{\code{when}}{See \sQuote{Conditional execution} below.}
 #' }
 #'
