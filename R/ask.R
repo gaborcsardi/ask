@@ -191,7 +191,10 @@ ask_ <- function(questions, .prompt = green(paste0(symbol$star, " "))) {
     qs_call$expr[[1]] <- as.name("question")
     qs_call$expr$type <- unname(qs_fun_names[[q]])
     qs_call$expr$name <- unname(qs_names[[q]])
-    answers <- lazy_eval(qs_call, data = list(question = question))
+    answers <- lazy_eval(
+      qs_call,
+      data = list(question = question, answers = answers)
+    )
   }
   answers
 }
