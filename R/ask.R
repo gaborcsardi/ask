@@ -105,25 +105,72 @@
 #' }
 
 ask <- function(..., .prompt = green(paste0(symbol$star, " "))) {
+  ask_(questions(...), .prompt = .prompt)
+}
+
+#' Store a series of questions, to ask them later
+#'
+#' Later you can call \code{\link{ask_}} (note the trailing underscore!)
+#' to ask them.
+#'
+#' @param ... Questions to store. See \code{\link{ask}}.
+#' @return An unevaluated series of questions for future use.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' qs <- questions(
+#'   name = input("What is your name?"),
+#'   color = choose("Red or blue?", c("Red", "Blue"))
+#' )
+#' ask_(qs)
+#'}
+
+questions <- function(...) {
+  x <- lazy_dots(...)
+  class(x) <- "ask_questions"
+  x
+}
+
+#' Ask a series of questions, stored in an object
+#'
+#' Store questions with \code{\link{questions}}, and then ask them
+#' with \code{ask_}.
+#'
+#' @param questions Questions stored with \code{\link{questions}}.
+#' @param .prompt Prompt to prepend to all questions.
+#' @return A named list with the answers, see \code{\link{ask}}
+#'   for the format.
+#'
+#' @export
+#' @examples
+#' \dontrun{
+#' qs <- questions(
+#'   name = input("What is your name?"),
+#'   color = choose("Red or blue?", c("Red", "Blue"))
+#' )
+#' ask_(qs)
+#'}
+
+ask_ <- function(questions, .prompt = green(paste0(symbol$star, " "))) {
 
   if (!interactive()) { stop("ask() can only be used in interactive mode" ) }
 
-  qs <- lazy_dots(...)
-  qs_names <- names(qs)
+  qs_names <- names(questions)
 
   if (is.null(qs_names) || any(qs_names == "") || any(duplicated(qs_names))) {
     stop("Questions must have unique names")
   }
 
-  if (any(unlist(lapply(qs, function(x) class(x$expr))) != "call")) {
+  if (any(unlist(lapply(questions, function(x) class(x$expr))) != "call")) {
     stop("Questions must be function calls")
   }
 
-  qs_fun_names <- unlist(lapply(qs, function(x) as.character(x$expr[[1]])))
+  qs_fun_names <- unlist(lapply(questions, function(x) as.character(x$expr[[1]])))
 
-  questions <- get_style()
+  question_style <- get_style()
 
-  unknown_fun <- setdiff(qs_fun_names, names(questions))
+  unknown_fun <- setdiff(qs_fun_names, names(question_style))
   if (length(unknown_fun)) {
     stop("Unknown question types: ", paste(unknown_fun, collapse = ", "))
   }
@@ -131,16 +178,16 @@ ask <- function(..., .prompt = green(paste0(symbol$star, " "))) {
   answers <- list()
 
   question <- function(message, ..., when = NULL, type, name) {
-    if (! type %in% names(questions)) stop("Unknown question type");
+    if (! type %in% names(question_style)) stop("Unknown question type");
 
     if (!is.null(when) && ! when(answers)) return(NULL)
 
-    answers[[name]] <- questions[[type]](.prompt %+% message, ...)
+    answers[[name]] <- question_style[[type]](.prompt %+% message, ...)
     answers
   }
 
-  for (q in seq_along(qs)) {
-    qs_call <- qs[[q]]
+  for (q in seq_along(questions)) {
+    qs_call <- questions[[q]]
     qs_call$expr[[1]] <- as.name("question")
     qs_call$expr$type <- unname(qs_fun_names[[q]])
     qs_call$expr$name <- unname(qs_names[[q]])
