@@ -16,7 +16,7 @@ style_fancy$confirm <- function(message, default = TRUE) {
     if (ans == 'y' || ans == 'n' || ans == '\n') break
   }
   ans <- ans == 'y' || (default && ans == '\n')
-  msg(c(magenta(bold('Y')), red('N'))[2 - ans], "\n", sep = "")
+  msg(c(magenta(bold(symbol$tick)), red(symbol$cross))[2 - ans], "\n", sep = "")
   ans
 }
 
@@ -31,11 +31,12 @@ style_fancy$choose <- function(message, choices, default = NA) {
 
   msg(message, appendLF = TRUE)
 
-  draw <- function() {
+  draw <- function(empty = FALSE) {
     choices[current] <- magenta(choices[current])
     pointer <- magenta(symbol$pointer)
     pr <- paste("", ifelse(seq_along(choices) == current, pointer, " "),
                 choices, collapse = "\n")
+    if (empty) pr <- gsub("[^\n]", " ", pr)
     msg(pr, appendLF = TRUE)
   }
 
@@ -58,6 +59,11 @@ style_fancy$choose <- function(message, choices, default = NA) {
     }
   }
 
+  cursor_up(length(choices) + 1)
+  msg(message, " ", magenta(choices[current]), appendLF = TRUE)
+  draw(empty = TRUE)
+  cursor_up(length(choices))
+
   choices[current]
 }
 
@@ -69,7 +75,7 @@ style_fancy$checkbox <- function(message, choices) {
 
   msg(message, appendLF = TRUE)
 
-  draw <- function() {
+  draw <- function(empty = FALSE) {
     choices[selected] <- magenta(choices[selected])
     pointer <- magenta(symbol$pointer)
     box_empty <- symbol$radio_off
@@ -80,6 +86,7 @@ style_fancy$checkbox <- function(message, choices) {
       ifelse(seq_along(choices) %in% selected, box_fill, box_empty),
       choices, collapse = "\n"
     )
+    if (empty) pr <- gsub("[^\n]", " ", pr)
     msg(pr, appendLF = TRUE)
   }
 
@@ -112,5 +119,13 @@ style_fancy$checkbox <- function(message, choices) {
       break
     }
   }
-  choices[sort(selected)]
+
+  res <- choices[sort(selected)]
+
+  cursor_up(length(choices) + 1)
+  msg(message, " ", paste(magenta(res), collapse = ", "), appendLF = TRUE)
+  draw(empty = TRUE)
+  cursor_up(length(choices))
+
+  res
 }
