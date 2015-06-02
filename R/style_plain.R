@@ -124,3 +124,7 @@ style_plain$checkbox <- function(message, choices, default = numeric()) {
   }
   res
 }
+
+style_plain$constant <- function(message = "", value) {
+  value
+}

@@ -41,6 +41,7 @@ The \code{ask} function takes named arguments only:
     answers (case insensitively).}
   \item{choose}{Choose one item form multiple items.}
   \item{checkbox}{Select multiple values from a list.}
+  \item{constant}{Not a question, it defines constants.}
 }
 }
 
@@ -102,6 +103,18 @@ The \code{ask} function takes named arguments only:
   \item{\code{choices}}{Possible choices, character vector.}
   \item{\code{default}}{Indices or values of default choices.
     values are matches using partial matches via \code{pmatch}.}
+  \item{\code{when}}{See \sQuote{Conditional execution} below.}
+}
+}
+
+\section{\sQuote{constant} type}{
+
+\preformatted{
+  constant(value = constant_value, when = NULL)
+}
+\describe{
+  \item{\code{constant_value}}{The constant value. Note that the
+    argument must be named.}
   \item{\code{when}}{See \sQuote{Conditional execution} below.}
 }
 }

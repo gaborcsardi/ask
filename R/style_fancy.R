@@ -161,3 +161,5 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
 
   res
 }
+
+style_fancy$constant <- style_plain$constant
