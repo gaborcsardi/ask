@@ -172,8 +172,8 @@ ask_ <- function(questions, .prompt = green(paste0(symbol$star, " "))) {
 
   qs_names <- names(questions)
 
-  if (is.null(qs_names) || any(qs_names == "") || any(duplicated(qs_names))) {
-    stop("Questions must have unique names")
+  if (is.null(qs_names) || any(qs_names == "")) {
+    stop("Questions must have names")
   }
 
   if (any(unlist(lapply(questions, function(x) class(x$expr))) != "call")) {
