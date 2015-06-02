@@ -20,7 +20,32 @@ style_fancy$confirm <- function(message, default = TRUE) {
   ans
 }
 
-style_fancy$input <- style_plain$input
+style_fancy$input <- function(message, default = "", filter = NULL,
+                              validate = NULL) {
+
+  orig_message <- message
+  if (default != "") message <- message %+% " (" %+% default %+% ")"
+
+  emph <- combine_styles(magenta, bold)
+
+  repeat {
+    result <- readline(bold(message) %+% " " %+% start(emph))
+    if (is.null(validate)) break
+    valres <- validate(result)
+    if (identical(valres, TRUE)) break
+    error_msg(finish(emph), valres)
+  }
+  if (result == "") {
+    cursor_up(1)
+    msg(orig_message %+% " " %+% emph(default) %+% "  ", appendLF = TRUE)
+    result <- default
+  }
+  msg(finish(emph))
+
+  if (!is.null(filter)) result <- filter(result)
+  result
+}
+
 
 #' @importFrom crayon magenta
 
