@@ -183,7 +183,7 @@ ask_ <- function(questions, .prompt = green(paste0(symbol$star, " "))) {
   question <- function(message, ..., when = NULL, type, name) {
     if (! type %in% names(question_style)) stop("Unknown question type");
 
-    if (!is.null(when) && ! when(answers)) return(NULL)
+    if (!is.null(when) && ! when(answers)) return(answers)
 
     answers[[name]] <- question_style[[type]](.prompt %+% message, ...)
     answers
