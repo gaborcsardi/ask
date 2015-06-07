@@ -107,7 +107,7 @@
 #' @export
 #' @importFrom lazyeval lazy_dots lazy_eval
 #' @importFrom crayon green
-#' @importFrom prettysymbols symbol
+#' @importFrom clisymbols symbol
 #' @examples
 #' \dontrun{
 #' ask(

@@ -1,7 +1,7 @@
 
 style_plain <- list()
 
-#' @importFrom prettysymbols symbol
+#' @importFrom clisymbols symbol
 #' @importFrom crayon combine_styles magenta bold start finish
 
 style_plain$confirm <- function(message, default = TRUE) {

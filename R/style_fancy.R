@@ -1,6 +1,6 @@
 
 #' @include style_plain.R
-#' @importFrom prettysymbols symbol
+#' @importFrom clisymbols symbol
 
 style_fancy <- list()
 
