@@ -1,2 +1,4 @@
 ^ask.Rproj$
 ^tags$
+^.travis\.yml$
+^appveyor\.yml$
