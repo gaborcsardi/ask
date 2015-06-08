@@ -6,7 +6,7 @@
 [![Linux Build Status](https://travis-ci.org/gaborcsardi/ask.svg?branch=master)](https://travis-ci.org/gaborcsardi/ask)
 [![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/ask?svg=true)](https://ci.appveyor.com/project/gaborcsardi/ask)
 [![](http://www.r-pkg.org/badges/version/ask)](http://www.r-pkg.org/pkg/ask)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/ask)](http://cran.r-project.org/web/packages/ask/index.html)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/ask)](http://www.r-pkg.org/pkg/ask)
 
 ## Introduction
 
