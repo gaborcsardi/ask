@@ -4,7 +4,7 @@
 \alias{ask}
 \title{Ask questions to the user, at the command line, and get the answers}
 \usage{
-ask(..., .prompt = green(paste0(symbol$star, " ")))
+ask(..., .prompt = yellow(paste0(symbol$pointer, " ")))
 }
 \arguments{
 \item{...}{Questions to ask, see details below.}

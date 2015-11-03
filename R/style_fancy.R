@@ -5,7 +5,7 @@
 style_fancy <- list()
 
 #' @importFrom keypress keypress
-#' @importFrom crayon magenta red bold
+#' @importFrom crayon blue red bold green
 
 style_fancy$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
@@ -16,7 +16,7 @@ style_fancy$confirm <- function(message, default = TRUE) {
     if (ans == 'y' || ans == 'n' || ans == '\n') break
   }
   ans <- ans == 'y' || (default && ans == '\n')
-  msg(c(magenta(bold(symbol$tick)), red(symbol$cross))[2 - ans], "\n", sep = "")
+  msg(c(green(bold(symbol$tick)), red(symbol$cross))[2 - ans], "\n", sep = "")
   ans
 }
 
@@ -28,7 +28,7 @@ style_fancy$input <- function(message, default = "", filter = NULL,
   orig_message <- message
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
-  emph <- combine_styles(magenta, bold)
+  emph <- combine_styles(blue, bold)
 
   repeat {
     result <- read_line(bold(message) %+% " " %+% start(emph))
@@ -37,11 +37,12 @@ style_fancy$input <- function(message, default = "", filter = NULL,
     if (identical(valres, TRUE)) break
     error_msg(finish(emph), valres)
   }
-  if (result == "") {
-    cursor_up(1)
-    msg(orig_message %+% " " %+% emph(default) %+% "  ", appendLF = TRUE)
-    result <- default
-  }
+
+  if (result == "") result <- default
+  
+  cursor_up(1)
+  msg(orig_message %+% " " %+% green(result) %+% "  ", appendLF = TRUE)
+
   msg(finish(emph))
 
   if (!is.null(filter)) result <- filter(result)
@@ -49,7 +50,7 @@ style_fancy$input <- function(message, default = "", filter = NULL,
 }
 
 
-#' @importFrom crayon magenta
+#' @importFrom crayon blue
 
 style_fancy$choose <- function(message, choices, default = NA) {
   if (is.character(default)) default <- pmatch(default, choices)
@@ -62,8 +63,8 @@ style_fancy$choose <- function(message, choices, default = NA) {
   msg(message, appendLF = TRUE)
 
   draw <- function(empty = FALSE) {
-    choices[current] <- magenta(choices[current])
-    pointer <- magenta(symbol$pointer)
+    choices[current] <- blue(choices[current])
+    pointer <- blue(symbol$pointer)
     pr <- paste("", ifelse(seq_along(choices) == current, pointer, " "),
                 choices, collapse = "\n")
     if (empty) pr <- gsub("[^\n]", " ", pr)
@@ -90,7 +91,7 @@ style_fancy$choose <- function(message, choices, default = NA) {
   }
 
   cursor_up(length(choices) + 1)
-  msg(message, " ", magenta(choices[current]), appendLF = TRUE)
+  msg(message, " ", green(choices[current]), appendLF = TRUE)
   draw(empty = TRUE)
   cursor_up(length(choices))
 
@@ -110,10 +111,10 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
   msg(message, appendLF = TRUE)
 
   draw <- function(empty = FALSE) {
-    choices[selected] <- magenta(choices[selected])
-    pointer <- magenta(symbol$pointer)
+    choices[selected] <- green(choices[selected])
+    pointer <- blue(symbol$pointer)
     box_empty <- symbol$radio_off
-    box_fill <- magenta(symbol$radio_on)
+    box_fill <- green(symbol$radio_on)
     pr <- paste(
       "",
       ifelse(seq_along(choices) == current, pointer, " "),
@@ -157,7 +158,7 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
   res <- choices[sort(selected)]
 
   cursor_up(length(choices) + 1)
-  msg(message, " ", paste(magenta(res), collapse = ", "), appendLF = TRUE)
+  msg(message, " ", paste(green(res), collapse = ", "), appendLF = TRUE)
   draw(empty = TRUE)
   cursor_up(length(choices))
 

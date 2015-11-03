@@ -106,7 +106,7 @@
 #'
 #' @export
 #' @importFrom lazyeval lazy_dots lazy_eval
-#' @importFrom crayon green
+#' @importFrom crayon yellow
 #' @importFrom clisymbols symbol
 #' @examples
 #' \dontrun{
@@ -118,7 +118,7 @@
 #' )
 #' }
 
-ask <- function(..., .prompt = green(paste0(symbol$star, " "))) {
+ask <- function(..., .prompt = yellow(paste0(symbol$pointer, " "))) {
   ask_(questions(...), .prompt = .prompt)
 }
 
@@ -166,7 +166,7 @@ questions <- function(...) {
 #' ask_(qs)
 #'}
 
-ask_ <- function(questions, .prompt = green(paste0(symbol$star, " "))) {
+ask_ <- function(questions, .prompt = yellow(paste0(symbol$pointer, " "))) {
 
   if (!interactive()) { stop("ask() can only be used in interactive mode" ) }
 
