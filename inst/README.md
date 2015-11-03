@@ -35,6 +35,7 @@ at all, so `ask()` will look a lot less nice in these
 Install using the `devtools` package:
 
 ```r
+devtools::install_github("gaborcsardi/readline")
 devtools::install_github("gaborcsardi/ask")
 ```
 

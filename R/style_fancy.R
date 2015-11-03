@@ -20,6 +20,8 @@ style_fancy$confirm <- function(message, default = TRUE) {
   ans
 }
 
+#' @importFrom readline read_line
+
 style_fancy$input <- function(message, default = "", filter = NULL,
                               validate = NULL) {
 
@@ -29,7 +31,7 @@ style_fancy$input <- function(message, default = "", filter = NULL,
   emph <- combine_styles(magenta, bold)
 
   repeat {
-    result <- readline(bold(message) %+% " " %+% start(emph))
+    result <- read_line(bold(message) %+% " " %+% start(emph))
     if (is.null(validate)) break
     valres <- validate(result)
     if (identical(valres, TRUE)) break
