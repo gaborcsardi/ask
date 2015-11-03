@@ -20,3 +20,4 @@ Collate:
     'style_plain.R'
     'style_fancy.R'
     'utils.R'
+RoxygenNote: 5.0.0
