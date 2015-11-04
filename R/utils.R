@@ -37,3 +37,7 @@ cursor_up <- function(num) {
 strtrim <- function(x) {
   gsub("\\s+$", "", gsub("^\\s+", "", x))
 }
+
+make_spaces <- function(n) {
+  paste(rep(" ", n), collapse = "")
+}

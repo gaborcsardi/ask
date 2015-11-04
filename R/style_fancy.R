@@ -41,7 +41,8 @@ style_fancy$input <- function(message, default = "", filter = NULL,
   if (result == "") result <- default
   
   cursor_up(1)
-  msg(orig_message %+% " " %+% green(result) %+% "  ", appendLF = TRUE)
+  spaces <- make_spaces(nchar(default, type = "width") + 3)
+  msg(orig_message %+% " " %+% green(result) %+% spaces, appendLF = TRUE)
 
   msg(finish(emph))
 
