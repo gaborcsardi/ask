@@ -23,28 +23,41 @@ style_fancy$confirm <- function(message, default = TRUE) {
 #' @importFrom readline read_line
 
 style_fancy$input <- function(message, default = "", filter = NULL,
-                              validate = NULL) {
+                              nextline = TRUE, validate = NULL) {
 
   orig_message <- message
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
-  emph <- combine_styles(blue, bold)
+  emph <- combine_styles(bold, green)
+
+  if (nextline) {
+    premsg <- bold(message) %+% start(emph) %+% "\n"
+    prompt <- "  "
+  } else {
+    premsg <- ""
+    prompt <- bold(message) %+% " " %+% start(emph)
+  }
+
+  on.exit(msg(finish(emph)), add = TRUE)
 
   repeat {
-    result <- read_line(bold(message) %+% " " %+% start(emph))
+    cat(premsg)
+    orig_result <- result <- read_line(prompt, multiline = nextline)
+    if (result == "") { orig_result <- result; result <- default }
     if (is.null(validate)) break
     valres <- validate(result)
     if (identical(valres, TRUE)) break
     error_msg(finish(emph), valres)
   }
 
-  if (result == "") result <- default
-  
-  cursor_up(1)
-  spaces <- make_spaces(nchar(default, type = "width") + 3)
-  msg(orig_message %+% " " %+% green(result) %+% spaces, appendLF = TRUE)
-
-  msg(finish(emph))
+  if (nextline && orig_result == "") {
+    cursor_up(1)
+    cat("  ", bold(result), "\n", sep = "")
+  } else if (!nextline) {
+    cursor_up(1)
+    spaces <- make_spaces(nchar(default, type = "width") + 3)
+    msg(orig_message %+% " " %+% emph(result) %+% spaces, appendLF = TRUE)
+  }
 
   if (!is.null(filter)) result <- filter(result)
   result

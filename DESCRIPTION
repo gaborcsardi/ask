@@ -21,5 +21,6 @@ Collate:
     'style_plain.R'
     'style_fancy.R'
     'utils.R'
-RoxygenNote: 5.0.0
-Suggests: testthat
+RoxygenNote: 5.0.1
+Suggests:
+    testthat

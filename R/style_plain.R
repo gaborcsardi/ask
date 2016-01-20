@@ -23,7 +23,7 @@ style_plain$confirm <- function(message, default = TRUE) {
 #' @importFrom crayon combine_styles magenta bold start finish
 
 style_plain$input <- function(message, default = "", filter = NULL,
-                            validate = NULL) {
+                              nextline = TRUE, validate = NULL) {
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
   emph <- combine_styles(magenta, bold)

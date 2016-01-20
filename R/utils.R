@@ -16,8 +16,13 @@ msg <- function(..., appendLF = FALSE) {
   message(..., appendLF = appendLF)
 }
 
-error_msg <- function(..., appendLF = TRUE) {
-  msg(..., appendLF = appendLF)
+#' @importFrom clisymbols symbol
+#' @importFrom crayon red
+
+error_msg <- function(..., appendLF = TRUE, markup = TRUE) {
+  str <- paste0(...)
+  if (markup) str <- red(paste0(symbol$cross, " ", str))
+  msg(str, appendLF = appendLF)
 }
 
 `%+%` <- function(l, r) {

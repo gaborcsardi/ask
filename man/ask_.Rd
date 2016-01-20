@@ -4,7 +4,7 @@
 \alias{ask_}
 \title{Ask a series of questions, stored in an object}
 \usage{
-ask_(questions, .prompt = green(paste0(symbol$star, " ")))
+ask_(questions, .prompt = yellow(paste0(symbol$pointer, " ")))
 }
 \arguments{
 \item{questions}{Questions stored with \code{\link{questions}}.}
