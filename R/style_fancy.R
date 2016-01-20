@@ -13,9 +13,9 @@ style_fancy$confirm <- function(message, default = TRUE) {
   repeat {
     ans <- keypress()
     ans <- tolower(ans)
-    if (ans == 'y' || ans == 'n' || ans == '\n') break
+    if (ans == 'y' || ans == 'n' || ans == 'enter') break
   }
-  ans <- ans == 'y' || (default && ans == '\n')
+  ans <- ans == 'y' || (default && ans == 'enter')
   msg(c(green(bold(symbol$tick)), red(symbol$cross))[2 - ans], "\n", sep = "")
   ans
 }
@@ -76,7 +76,7 @@ style_fancy$choose <- function(message, choices, default = NA) {
   repeat {
     repeat {
       ans <- keypress()
-      if (ans %in% c("up", "down", "n", "p", "\n", " ")) break
+      if (ans %in% c("up", "down", "n", "p", "enter", " ")) break
     }
     if (ans %in% c("up", "p") && current != 1) {
       current <- current - 1
@@ -86,7 +86,7 @@ style_fancy$choose <- function(message, choices, default = NA) {
       current <- current + 1
       cursor_up(length(choices))
       draw()
-    } else if (ans %in% c("\n", " ")) {
+    } else if (ans %in% c("enter", " ")) {
       break
     }
   }
@@ -130,7 +130,7 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
   repeat {
     repeat {
       ans <- keypress()
-      if (ans %in% c("up", "down", "n", "p", "\n", " ")) break
+      if (ans %in% c("up", "down", "n", "p", "enter", " ")) break
     }
     if (ans %in% c("up", "p") && current != 1) {
       current <- current - 1
@@ -151,7 +151,7 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
       cursor_up(length(choices))
       draw()
 
-    } else if (ans == "\n") {
+    } else if (ans == "enter") {
       break
     }
   }
