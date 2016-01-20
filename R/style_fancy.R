@@ -23,12 +23,14 @@ style_fancy$confirm <- function(message, default = TRUE) {
 #' @importFrom readline read_line
 
 style_fancy$input <- function(message, default = "", filter = NULL,
-                              nextline = TRUE, validate = NULL) {
+                              nextline = TRUE, wrap = TRUE, validate = NULL) {
+
+  tw <- terminal_width()
 
   orig_message <- message
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
-  emph <- combine_styles(bold, green)
+  emph <- combine_styles(bold, blue)
 
   if (nextline) {
     premsg <- bold(message) %+% start(emph) %+% "\n"
@@ -50,14 +52,23 @@ style_fancy$input <- function(message, default = "", filter = NULL,
     error_msg(finish(emph), valres)
   }
 
-  if (nextline && orig_result == "") {
-    cursor_up(1)
-    cat("  ", bold(result), "\n", sep = "")
+  if (nextline) {
+    uplines <- ceiling((nchar(result) + 3) / tw) + 1
+    cursor_up(uplines)
+    spaces1 <- make_spaces(tw)
+    spaces2 <- make_spaces(nchar(orig_result, type = "width"))
+    msg(orig_message %+% spaces1 %+% "\r  " %+% spaces2, appendLF = TRUE)
+
+    cursor_up(uplines - 1)
+    msg(bold(green(wrap_if(result, wrap))), appendLF = TRUE)
+
   } else if (!nextline) {
     cursor_up(1)
     spaces <- make_spaces(nchar(default, type = "width") + 3)
-    msg(orig_message %+% " " %+% emph(result) %+% spaces, appendLF = TRUE)
+    msg(orig_message %+% " " %+% bold(green(result)) %+% spaces, appendLF = TRUE)
   }
+
+  result <- sub("^  ", "", wrap_if(result, wrap))
 
   if (!is.null(filter)) result <- filter(result)
   result

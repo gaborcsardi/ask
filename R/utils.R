@@ -46,3 +46,18 @@ strtrim <- function(x) {
 make_spaces <- function(n) {
   paste(rep(" ", n), collapse = "")
 }
+
+terminal_width <- function() {
+  as.numeric(system("tput cols", intern = TRUE))
+}
+
+wrap_if <- function(x, wrap) {
+  if (wrap) {
+    paste(
+      strwrap(x, indent = 2, exdent = 2, width = terminal_width()),
+      collapse = "\n"
+    )
+  } else {
+    x
+  }
+}
