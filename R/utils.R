@@ -12,8 +12,10 @@ is_index <- function(vector, idx) {
     idx >= 1 && idx <= length(vector)
 }
 
+#' @importFrom crayon bold
+
 msg <- function(..., appendLF = FALSE) {
-  message(..., appendLF = appendLF)
+  message(finish(bold), ..., appendLF = appendLF)
 }
 
 #' @importFrom clisymbols symbol

@@ -5,7 +5,7 @@
 style_fancy <- list()
 
 #' @importFrom keypress keypress
-#' @importFrom crayon blue red bold green
+#' @importFrom crayon blue red green
 
 style_fancy$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
@@ -16,7 +16,7 @@ style_fancy$confirm <- function(message, default = TRUE) {
     if (ans == 'y' || ans == 'n' || ans == 'enter') break
   }
   ans <- ans == 'y' || (default && ans == 'enter')
-  msg(c(green(bold(symbol$tick)), red(symbol$cross))[2 - ans], "\n", sep = "")
+  msg(c(green(symbol$tick), red(symbol$cross))[2 - ans], "\n", sep = "")
   ans
 }
 
@@ -30,14 +30,14 @@ style_fancy$input <- function(message, default = "", filter = NULL,
   orig_message <- message
   if (default != "") message <- message %+% " (" %+% default %+% ")"
 
-  emph <- combine_styles(bold, blue)
+  emph <- blue
 
   if (nextline) {
-    premsg <- bold(message) %+% start(emph) %+% "\n"
+    premsg <- message %+% start(emph) %+% "\n"
     prompt <- "  "
   } else {
     premsg <- ""
-    prompt <- bold(message) %+% " " %+% start(emph)
+    prompt <- message %+% " " %+% start(emph)
   }
 
   on.exit(msg(finish(emph)), add = TRUE)
@@ -60,12 +60,12 @@ style_fancy$input <- function(message, default = "", filter = NULL,
     msg(orig_message %+% spaces1 %+% "\r  " %+% spaces2, appendLF = TRUE)
 
     cursor_up(uplines - 1)
-    msg(bold(green(wrap_if(result, wrap))), appendLF = TRUE)
+    msg(green(wrap_if(result, wrap)), appendLF = TRUE)
 
   } else if (!nextline) {
     cursor_up(1)
     spaces <- make_spaces(nchar(default, type = "width") + 3)
-    msg(orig_message %+% " " %+% bold(green(result)) %+% spaces, appendLF = TRUE)
+    msg(orig_message %+% " " %+% green(result) %+% spaces, appendLF = TRUE)
   }
 
   result <- sub("^  ", "", wrap_if(result, wrap))
