@@ -180,16 +180,38 @@ ask_ <- function(questions, .prompt = yellow(paste0(symbol$pointer, " "))) {
     stop("Questions must be function calls")
   }
 
-  qs_fun_names <- unlist(lapply(questions, function(x) as.character(x$expr[[1]])))
+  qs_fun_names <- question_function_names(questions)
 
   question_style <- get_style()
 
-  unknown_fun <- setdiff(qs_fun_names, names(question_style))
-  if (length(unknown_fun)) {
-    stop("Unknown question types: ", paste(unknown_fun, collapse = ", "))
-  }
+  if (isTRUE(question_style$onepage)) {
+    ask_onepage(question_style, questions, .prompt)
 
-  answers <- list()
+  } else {
+    unknown_fun <- setdiff(qs_fun_names, names(question_style))
+    if (length(unknown_fun)) {
+      stop("Unknown question types: ", paste(unknown_fun, collapse = ", "))
+    }
+    ask_onebyone(question_style, questions, .prompt)
+  }
+}
+
+question_function_names <- function(questions) {
+  unlist(lapply(questions, function(x) as.character(x$expr[[1]])))
+}
+
+question_call <- function(question, fun = "question") {
+  qs_call <- question[[1]]
+  qs_call$expr[[1]] <- as.name(fun)
+  qs_call$expr$type <- as.character(question[[1]]$expr[[1]])
+  qs_call$expr$name <- names(question)
+  qs_call
+}
+
+ask_onebyone <- function(question_style, questions, .prompt) {
+
+  qs_names <- names(questions)
+  qs_fun_names <- question_function_names(questions)
 
   question <- function(message, ..., when = NULL, type, name) {
     if (! type %in% names(question_style)) stop("Unknown question type");
@@ -200,23 +222,25 @@ ask_ <- function(questions, .prompt = yellow(paste0(symbol$pointer, " "))) {
     answers
   }
 
+  answers <- list()
+
   for (q in seq_along(questions)) {
-    qs_call <- questions[[q]]
-    qs_call$expr[[1]] <- as.name("question")
-    qs_call$expr$type <- unname(qs_fun_names[[q]])
-    qs_call$expr$name <- unname(qs_names[[q]])
+    qs_call <- question_call(questions[q])
     answers <- lazy_eval(
       qs_call,
       data = list(question = question, answers = answers)
     )
   }
   answers
+
 }
 
 #' @importFrom keypress has_keypress_support
 
 get_style <- function() {
-  if (can_move_cursor() && has_keypress_support()) {
+  if (has_rstudio_addin_support()) {
+    style_rstudio_addin
+  } else if (can_move_cursor() && has_keypress_support()) {
     style_fancy
   } else {
     style_plain

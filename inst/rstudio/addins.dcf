@@ -1,0 +1,4 @@
+Name: Mason - The R package builder
+Description: Build slick R packages in seconds
+Binding: rstudio_addin_hook
+Interactive: true

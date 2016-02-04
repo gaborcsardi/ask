@@ -18,9 +18,15 @@ Imports:
     clisymbols
 Collate:
     'ask.R'
+    'onepage.R'
     'style_plain.R'
     'style_fancy.R'
+    'style_rstudio_addin.R'
     'utils.R'
 RoxygenNote: 5.0.1
 Suggests:
-    testthat
+    testthat,
+    rstudioapi,
+    shiny,
+    htmltools,
+    miniUI

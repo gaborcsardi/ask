@@ -63,3 +63,27 @@ wrap_if <- function(x, wrap) {
     x
   }
 }
+
+is_rstudio <- function() {
+  Sys.getenv("RSTUDIO") == 1
+}
+
+is_pkg_installed <- function(pkg) {
+  tryCatch(
+    { packageDescription(pkg); TRUE },
+    warning = function(w) FALSE,
+    error = function(e) FALSE
+  )
+}
+
+has_rstudio_addin_support <- function() {
+  is_rstudio() &&
+    rstudioapi::versionInfo()$version >= "0.99.857" &&
+    is_pkg_installed("shiny") &&
+    packageVersion("shiny") >= "0.13.0" &&
+    is_pkg_installed("rstudioapi") &&
+    is_pkg_installed("htmltools") &&
+    packageVersion("htmltools") >= "0.3" &&
+    is_pkg_installed("miniUI") &&
+    packageVersion("miniUI") >= "0.1.1"
+}
