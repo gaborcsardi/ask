@@ -15,12 +15,13 @@ Imports:
     keypress,
     readline,
     crayon (>= 1.3.0),
-    clisymbols
+    clisymbols,
+    stats
 Collate:
     'ask.R'
     'style_plain.R'
     'style_fancy.R'
     'utils.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 5.0.1.9000
 Suggests:
     testthat

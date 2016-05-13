@@ -2,7 +2,8 @@
 style_plain <- list()
 
 #' @importFrom clisymbols symbol
-#' @importFrom crayon combine_styles magenta bold start finish
+#' @importFrom crayon combine_styles magenta bold finish
+#' @importFrom stats start
 
 style_plain$confirm <- function(message, default = TRUE) {
   prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
@@ -20,7 +21,8 @@ style_plain$confirm <- function(message, default = TRUE) {
   res
 }
 
-#' @importFrom crayon combine_styles magenta bold start finish
+#' @importFrom crayon combine_styles magenta bold finish
+#' @importFrom stats start
 
 style_plain$input <- function(message, default = "", filter = NULL,
                               nextline = TRUE, wrap = TRUE, validate = NULL) {
