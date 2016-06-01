@@ -1,8 +1,4 @@
 
-check_tty <- function() {
-  stopifnot(isatty(stdin()))
-}
-
 is_integerish <- function(x) {
   all(round(x) == x)
 }
@@ -10,6 +6,10 @@ is_integerish <- function(x) {
 is_index <- function(vector, idx) {
   is_integerish(idx) && length(idx) == 1 &&
     idx >= 1 && idx <= length(vector)
+}
+
+is_string <- function(x) {
+  is.character(x) && length(x) == 1 && ! is.na(x)
 }
 
 #' @importFrom crayon bold
@@ -62,4 +62,16 @@ wrap_if <- function(x, wrap) {
   } else {
     x
   }
+}
+
+check_named <- function(list) {
+  n <- names(list)
+  if (length(list) && (is.null(n) || any(n == ""))) {
+    stop("Questions must have names")
+  }
+  list
+}
+
+is_rstudio <- function() {
+  Sys.getenv("RSTUDIO") == "1"
 }

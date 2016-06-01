@@ -11,17 +11,21 @@ LazyData: true
 URL: https://github.com/gaborcsardi/ask
 BugReports: https://github.com/gaborcsardi/ask/issues
 Imports:
-    lazyeval,
     keypress,
     readline,
     crayon (>= 1.3.0),
     clisymbols,
+    R6,
     stats
 Collate:
-    'ask.R'
-    'style_plain.R'
-    'style_fancy.R'
+    'ask2.R'
+    'backend_fancy.R'
+    'backend_plain.R'
+    'backends.R'
+    'package.R'
+    'questions.R'
     'utils.R'
-RoxygenNote: 5.0.1.9000
+RoxygenNote: 5.0.1
 Suggests:
+    covr,
     testthat

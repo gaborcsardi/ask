@@ -1,29 +1,69 @@
 
-#' @include style_plain.R
-#' @importFrom clisymbols symbol
+#' @export
 
-style_fancy <- list()
+ask_backend_fancy <- R6::R6Class(
+  "ask_backend_fancy",
+  inherit = ask::ask_backend,
+  public = list(
+    initialize = function() {
+      ask_backend_fancy_init(self, private, super)
+    },
+    ask = function(question) {
+      ask_backend_fancy_ask(self, private, question)
+    }
+  ),
+  private = list(
+    emph = NULL
+  )
+)
+
+#' @importFrom crayon combine_styles green bold
+
+ask_backend_fancy_init <- function(self, private, super) {
+  super$initialize()
+  private$emph <- combine_styles(green, bold)
+  self
+}
+
+ask_backend_fancy_ask <- function(self, private, question) {
+  switch(
+    question$type,
+    "confirm"  = ask_backend_fancy_confirm (self, private, question),
+    "input"    = ask_backend_fancy_input   (self, private, question),
+    "choose"   = ask_backend_fancy_choose  (self, private, question),
+    "checkbox" = ask_backend_fancy_checkbox(self, private, question),
+    "constant" = ask_backend_fancy_constant(self, private, question),
+    "banner"   = ask_backend_fancy_banner  (self, private, question)
+  )
+}
 
 #' @importFrom keypress keypress
 #' @importFrom crayon blue red green
+#' @importFrom clisymbols symbol
 
-style_fancy$confirm <- function(message, default = TRUE) {
-  prompt <- c(" (y/N) ", " (Y/n) ")[default + 1]
-  msg(message %+% prompt)
+ask_backend_fancy_confirm <- function(self, private, question) {
+  prompt <- c(" (y/N) ", " (Y/n) ")[question$default + 1]
+  msg(question$message %+% prompt)
   repeat {
     ans <- keypress()
     ans <- tolower(ans)
     if (ans == 'y' || ans == 'n' || ans == 'enter') break
   }
-  ans <- ans == 'y' || (default && ans == 'enter')
+  ans <- ans == 'y' || (question$default && ans == 'enter')
   msg(c(green(symbol$tick), red(symbol$cross))[2 - ans], "\n", sep = "")
   ans
 }
 
 #' @importFrom readline read_line
 
-style_fancy$input <- function(message, default = "", filter = NULL,
-                              nextline = TRUE, wrap = TRUE, validate = NULL) {
+ask_backend_fancy_input <- function(self, private, question) {
+
+  message  <- question$message
+  default  <- question$default
+  filter   <- question$filter
+  nextline <- question$nextline
+  wrap     <- question$wrap
+  validate <- question$validate
 
   tw <- terminal_width()
 
@@ -74,10 +114,12 @@ style_fancy$input <- function(message, default = "", filter = NULL,
   result
 }
 
+ask_backend_fancy_choose <- function(self, private, question) {
 
-#' @importFrom crayon blue
+  message <- question$message
+  choices <- question$choices
+  default <- question$default
 
-style_fancy$choose <- function(message, choices, default = NA) {
   if (is.character(default)) default <- pmatch(default, choices)
   default <- as.numeric(default)
   stopifnot(is.na(default) || is_index(choices, default))
@@ -123,7 +165,11 @@ style_fancy$choose <- function(message, choices, default = NA) {
   choices[current]
 }
 
-style_fancy$checkbox <- function(message, choices, default = numeric()) {
+ask_backend_fancy_checkbox <- function(self, private, question) {
+
+  message <- question$message
+  choices <- question$choices
+  default <- question$default
 
   choices <- as.character(choices)
 
@@ -190,4 +236,11 @@ style_fancy$checkbox <- function(message, choices, default = numeric()) {
   res
 }
 
-style_fancy$constant <- style_plain$constant
+ask_backend_fancy_constant <- function(self, private, question) {
+  question$value
+}
+
+ask_backend_fancy_banner <- function(self, private, question) {
+  msg(question$message, appendLF = TRUE)
+  NULL
+}
