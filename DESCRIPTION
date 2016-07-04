@@ -1,8 +1,8 @@
 Package: ask
 Title: Friendly Command Line Interface Tools
 Version: 1.0.0
-Author: Gabor Csardi [aut, cre]
-Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
+Author: Gábor Csárdi [aut, cre]
+Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
 Description: Ask questions to the user through the CLI and validate the answer.
     Several types of input are supported: yes-no question, single choice,
     multiple choice, etc.
@@ -29,3 +29,4 @@ RoxygenNote: 5.0.1
 Suggests:
     covr,
     testthat
+Encoding: UTF-8
