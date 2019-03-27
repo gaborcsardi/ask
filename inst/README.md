@@ -32,11 +32,10 @@ at all, so `ask()` will look a lot less nice in these
 
 ## Installation
 
-Install using the `devtools` package:
+Once on CRAN, you can install the package with:
 
 ```r
-devtools::install_github("gaborcsardi/readline")
-devtools::install_github("gaborcsardi/ask")
+install.packages("ask")
 ```
 
 ## Usage
