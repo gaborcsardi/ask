@@ -64,6 +64,8 @@ ask(
 	}, filter = as.integer),
   toppings = choose("What about the topping?",
     c("Peperonni and cheese", "All dressed", "Hawaïan")),
+  toppings_extra = checkbox("Extra toppings?",
+    c("Peperonni", "Ham", "Extra Cheese", "Olives", "Mushrooms", "Chilis")),
   beverage = choose("You also get a free 2L beverage",
     c("Pepsi", "7up", "Coke")),
   comments = input("Any comments about your purchase experience?",
